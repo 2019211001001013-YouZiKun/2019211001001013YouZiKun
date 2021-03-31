@@ -5,16 +5,20 @@
          version="4.0">
     <servlet>
         <servlet-name>anyName</servlet-name>
-        <servlet-class>com.dabing.week2.demo.HelloWorldServlet</servlet-class>
+        <servlet-class>com.YouZiKun.week2.demo.HelloWorldServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LifeCycleServlet</servlet-name>
-        <servlet-class>com.dabing.week3.demo.LifeCycleServlet</servlet-class>
+        <servlet-class>com.YouZiKun.week3.demo.LifeCycleServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.dabing.week3.demo.RegisterServlet</servlet-class>
+        <servlet-class>com.YouZiKun.week3.demo.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>JDBCDemoServlet</servlet-name>
+        <servlet-class>com.YouZiKun.week4.demo.JDBCDemoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>anyName</servlet-name>
@@ -27,5 +31,9 @@
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JDBCDemoServlet</servlet-name>
+        <url-pattern>/jdbc</url-pattern>
     </servlet-mapping>
 </web-app>
