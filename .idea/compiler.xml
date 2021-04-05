@@ -9,7 +9,7 @@
         <module name="2019211001001013YouZiKun" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="15">
+    <bytecodeTargetLevel target="1.8">
       <module name="2019211001001013YouZiKun" target="1.8" />
     </bytecodeTargetLevel>
   </component>
