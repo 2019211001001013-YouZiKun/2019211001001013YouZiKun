@@ -12,8 +12,9 @@ public class LoginServlet extends HttpServlet {
     Connection con=null;
     @Override
     public void init() throws ServletException {
+
         //method 1:
-        String driver=getServletContext().getInitParameter("driver");
+        /*String driver=getServletContext().getInitParameter("driver");
         String url=getServletContext().getInitParameter("url");
         String username=getServletContext().getInitParameter("Username");
         String password=getServletContext().getInitParameter("Password");
@@ -24,7 +25,8 @@ public class LoginServlet extends HttpServlet {
             con=DriverManager.getConnection(url,username,password);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        }
+        }*/
+        con= (Connection) getServletContext().getAttribute("con");
         //TODO 1: GET 4 CONTEXT PARAM- DRIVER,URL,USERNAME,PASSWORD
         //TODO 2: GET JDBC connection
     }
@@ -58,20 +60,50 @@ public class LoginServlet extends HttpServlet {
         //method 4:
         PreparedStatement ps=null;
         ResultSet rs=null;
+        System.out.println("Hello world");
         try {
             ps=con.prepareStatement("SELECT* FROM usertable WHERE username=? and password=?");
             ps.setString(1,username);
             ps.setString(2,password);
             rs=ps.executeQuery();
             //return 1 row ----not use while
-            PrintWriter pw=response.getWriter();
+            //PrintWriter pw=response.getWriter();
             if(rs.next()){
+                request.setAttribute("username",rs.getString("username"));
+                request.setAttribute("password",rs.getString("password"));
+                request.setAttribute("email",rs.getString("email"));
+                request.setAttribute("gender",rs.getString("gender"));
+                request.setAttribute("birthdate",rs.getString("birthdate"));
+
+
+
+                request.getRequestDispatcher("userInfo.jsp").forward(request,response);
+                //System.out.println("1 "+rs.getString(1));
+                //System.out.println("2 "+rs.getString(2));
+
+
+/*
+                pw.println("<html>");
+                pw.println("<style type=\"text/css\">" +
+                        "font{font: italic bold 24px \"Cambria\"}" +
+                        "</style>");
                 pw.println("<font>");
                 pw.println("Login Success !!!"+"<br>");
-                pw.println("Welcome,"+username);
+                pw.println("Welcome,"+username);*/
             }
-            else pw.println("Username or Password Error!!!");
+            else{
+                request.setAttribute("message","Username or Password Error!!!");
+                request.getRequestDispatcher("login.jsp").forward(request,response);
+            }
+            /*
+            else {
+                request.getRequestDispatcher("Login.jsp");
+            }
+*/
+
+            /*else pw.println("Username or Password Error!!!");
             pw.println("</font>");
+            pw.println("</html>");*/
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

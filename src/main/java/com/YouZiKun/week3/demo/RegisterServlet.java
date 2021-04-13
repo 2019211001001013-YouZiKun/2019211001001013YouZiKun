@@ -18,6 +18,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         //declare
+        /*
         String driver=getServletContext().getInitParameter("driver");
         String url=getServletContext().getInitParameter("url");
         String Username=getServletContext().getInitParameter("Username");
@@ -29,7 +30,8 @@ public class RegisterServlet extends HttpServlet {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
+        */
+        con= (Connection) getServletContext().getAttribute("con");
     }
 
     @Override
@@ -58,36 +60,46 @@ public class RegisterServlet extends HttpServlet {
             throwables.printStackTrace();
         }
 
+        response.sendRedirect("login.jsp");
+
         //7.select all rows from "usertable"
+
+/*
         PrintWriter wr= response.getWriter();
         wr.print("<table border=1>"
                 );
         wr.print( "<tr>" +
-                    "<th>username</th>" +
-                    "<th>password</th>" +
-                    "<th>email</th>" +
-                    "<th>gender</th>" +
-                    "<th>birthDate</th>" +
+                    "<td>username</td>" +
+                    "<td>password</td>" +
+                    "<td>email</td>" +
+                    "<td>gender</td>" +
+                    "<td>birthDate</td>" +
                   "</tr>" );
+
+ */
+        /*
         try {
             ResultSet rs = con.createStatement().executeQuery("SELECT* FROM usertable");
             while (rs.next()) {
                 wr.print("<tr>" +
-                            "<th>"+rs.getString(1)+"</th>" +
-                            "<th>"+rs.getString(2)+"</th>" +
-                            "<th>"+rs.getString(3)+"</th>" +
-                            "<th>"+rs.getString(4)+"</th>" +
-                            "<th>"+rs.getString(5)+"</th>" +
+                            "<td>"+rs.getString(1)+"</td>" +
+                            "<td>"+rs.getString(2)+"</td>" +
+                            "<td>"+rs.getString(3)+"</td>" +
+                            "<td>"+rs.getString(4)+"</td>" +
+                            "<td>"+rs.getString(5)+"</td>" +
                         "</tr>");
             }
+            //use request attribute
+            //set rs request attribute
+            request.setAttribute("rsname",rs);
+            request.getRequestDispatcher("userList.jsp").forward(request,response);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        wr.print("</table>");
+        //wr.print("</table>");
         //8.print all rows -use html <table><tr><td>
 
         //Print
-        /*
         PrintWriter writer=response.getWriter();
         writer.println("<br>username :"+username);
         writer.println("<br> password :"+password);
