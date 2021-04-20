@@ -1,5 +1,8 @@
 package com.YouZiKun.week5.demo;
 
+import com.YouZiKun.dao.UserDao;
+import com.YouZiKun.model.User;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -33,10 +36,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
-
+        request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
 
 
 
@@ -54,15 +54,37 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+
         //method 3:
         String username=request.getParameter("UserName");
         String password=request.getParameter("PassWord");
+        //=数据库访问对象....
+        UserDao userDao=new UserDao();
+        try {
+            User user=userDao.findByUsernamePassword(con,username,password);
+            if (user!=null){
+                request.setAttribute("user",user);
+                request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
+            }else{
+                request.setAttribute("message","Username or Password Error!!!");
+                request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
+            }
+            //userDao.saveUser(con,user);
+            //userDao.deleteUser(con,user);
+            //userDao.updateUser(con,user);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        /*
         //method 4:
         PreparedStatement ps=null;
         ResultSet rs=null;
         System.out.println("Hello world");
         try {
-            ps=con.prepareStatement("SELECT* FROM usertable WHERE username=? and password=?");
+            ps=con.prepareStatement("SELECT* FROM usertable WHERE username=? AND password=?");
             ps.setString(1,username);
             ps.setString(2,password);
             rs=ps.executeQuery();
@@ -81,31 +103,27 @@ public class LoginServlet extends HttpServlet {
                 //System.out.println("1 "+rs.getString(1));
                 //System.out.println("2 "+rs.getString(2));
 
-
-/*
                 pw.println("<html>");
                 pw.println("<style type=\"text/css\">" +
                         "font{font: italic bold 24px \"Cambria\"}" +
                         "</style>");
                 pw.println("<font>");
                 pw.println("Login Success !!!"+"<br>");
-                pw.println("Welcome,"+username);*/
+                pw.println("Welcome,"+username);
             }
             else{
                 request.setAttribute("message","Username or Password Error!!!");
                 request.getRequestDispatcher("login.jsp").forward(request,response);
             }
-            /*
+
             else {
                 request.getRequestDispatcher("Login.jsp");
             }
-*/
-
-            /*else pw.println("Username or Password Error!!!");
+            else pw.println("Username or Password Error!!!");
             pw.println("</font>");
-            pw.println("</html>");*/
+            pw.println("</html>");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
+        }*/
     }
 }
