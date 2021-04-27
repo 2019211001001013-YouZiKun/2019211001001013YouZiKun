@@ -9,6 +9,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "LoginServlet", value = "/login")
@@ -64,9 +65,31 @@ public class LoginServlet extends HttpServlet {
         //=数据库访问对象....
         UserDao userDao=new UserDao();
         try {
-            User user=userDao.findByUsernamePassword(con,username,password);
-            if (user!=null){
-                request.setAttribute("user",user);
+            //User user=userDao.findByUsernamePassword(con,username,password);
+            List<User> users;
+            users=userDao.findByPassword(con,password);
+            if (users!=null){
+
+                String rememberMe=request.getParameter("rememberMe");
+                if (rememberMe!=null && rememberMe.equals("1")){
+                    Cookie usernameCookie=new Cookie("cUsername",users.get(0).getUsername());
+                    Cookie passwordCookie=new Cookie("cPassword",users.get(0).getPassword());
+                    Cookie rememberMeCookie=new Cookie("cRememberMe",rememberMe);
+
+                    usernameCookie.setMaxAge(5);
+                    passwordCookie.setMaxAge(5);
+                    rememberMeCookie.setMaxAge(5);
+
+                    response.addCookie(usernameCookie);
+                    response.addCookie(passwordCookie);
+                    response.addCookie(rememberMeCookie);
+                }
+
+                HttpSession session=request.getSession();
+                System.out.println("sessionid-->"+session.getId());
+                session.setMaxInactiveInterval(10);
+
+                session.setAttribute("user",users.get(0));
                 request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
             }else{
                 request.setAttribute("message","Username or Password Error!!!");
@@ -75,7 +98,6 @@ public class LoginServlet extends HttpServlet {
             //userDao.saveUser(con,user);
             //userDao.deleteUser(con,user);
             //userDao.updateUser(con,user);
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

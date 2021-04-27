@@ -2,17 +2,15 @@ package com.YouZiKun.dao;
 
 import com.YouZiKun.model.User;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 
 public class UserDao implements IUserDao{
     @Override
     public boolean saveUser(Connection con, User user) throws SQLException {
         Statement stmt=con.createStatement();
         int result=stmt.executeUpdate("INSERT INTO usertable VALUES("+
-         "'"+user.getUsername()+"','"+user.getPassword()+"','"+user.getEmail()+"','"+user.getGender()+"','"+user.getBirthdate()+"')");
+         user.getId()+"','"+user.getUsername()+"','"+user.getPassword()+"','"+user.getEmail()+"','"+user.getGender()+"','"+user.getBirthdate()+"')");
 
         if (result==1) return true;
         else return false;
@@ -27,6 +25,20 @@ public class UserDao implements IUserDao{
 
     @Override
     public int updateUser(Connection con, User user) throws SQLException {
+        //todo 5.1 - write update sql where id=?
+        //todo 5.2 - create prepared statement
+        //todo 5.3 - executeUpdate()
+        //todo 5.4 - return int
+
+        PreparedStatement ps=con.prepareStatement("UPDATE usertable SET username=?,password=?,email=?,gender=?,birthdate=? WHERE id=? ");
+        ps.setString(1,user.getUsername());
+        ps.setString(2,user.getPassword());
+        ps.setString(3,user.getEmail());
+        ps.setString(4,user.getGender());
+        ps.setString(5,user.getBirthdate());
+        ps.setString(6,user.getId());
+        return ps.executeUpdate();
+        /*
         Statement stmt=con.createStatement();
         int result=stmt.executeUpdate("UPDATE usertable SET username='"
                 +user.getUsername()+"',password='"
@@ -34,8 +46,8 @@ public class UserDao implements IUserDao{
                 +user.getEmail()+"',gender='"
                 +user.getGender()+"',birthdate='"
                 +user.getBirthdate()+"'" +
-                "WHERE username='"+user.getUsername()+"'");
-        return result;
+                "WHERE id='"+user.getId()+"'");
+        return result;*/
     }
 
     @Override
@@ -56,52 +68,62 @@ public class UserDao implements IUserDao{
         }
         return user;
     }
-    public List<User> findMethod(Connection con,String str,String sql) throws  SQLException{
+    public List<User> findMethod(Connection con,String sql) throws  SQLException{
         Statement stmt=con.createStatement();
         ResultSet rs=stmt.executeQuery(sql);
         User user=null;
-        if (rs.next()){
+        List<User> users=new ArrayList<User>();
+        while(rs.next()){
             user=new User();
+            user.setId(rs.getString("id"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
             user.setGender(rs.getString("gender"));
             user.setBirthdate(rs.getString("birthdate"));
+            users.add(user);
         }
-        return (List<User>) user;
+        return users;
     }
+
+    @Override
+    public List<User> findById(Connection con, String id) throws SQLException {
+        String sql="SELECT* FROM usertable WHERE username='"+id+"'";
+        return findMethod(con,sql);
+    }
+
     @Override
     public List<User> findByUsername(Connection con, String username) throws SQLException {
         String sql="SELECT* FROM usertable WHERE username='"+username+"'";
-        return findMethod(con,username,sql);
+        return findMethod(con,sql);
     }
 
     @Override
     public List<User> findByPassword(Connection con, String password) throws SQLException {
         String sql="SELECT* FROM usertable WHERE password='"+password+"'";
-        return findMethod(con,password,sql);
+        return findMethod(con,sql);
     }
 
     @Override
     public List<User> findByEmail(Connection con, String email) throws SQLException {
         String sql="SELECT* FROM usertable WHERE email='"+email+"'";
-        return findMethod(con,email,sql);
+        return findMethod(con,sql);
     }
     @Override
     public List<User> findByGender(Connection con, String gender) throws SQLException {
         String sql="SELECT* FROM usertable WHERE ='"+gender+"'";
-        return findMethod(con,gender,sql);
+        return findMethod(con,sql);
     }
 
     @Override
     public List<User> findByBirthdate(Connection con, String birthDate) throws SQLException {
         String sql="SELECT* FROM usertable WHERE ='"+birthDate+"'";
-        return findMethod(con,birthDate,sql);
+        return findMethod(con,sql);
     }
 
     @Override
     public List<User> findAllUser(Connection con) throws SQLException {
         String sql="SELECT* FROM usertable";
-        return null;
+        return findMethod(con,sql);
     }
 }

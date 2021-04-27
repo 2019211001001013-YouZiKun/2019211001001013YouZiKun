@@ -3,6 +3,7 @@ package com.YouZiKun.model;
 import java.util.Date;
 
 public class User {
+    private String id;
     private String username;
     private String password;
     private String email;
@@ -16,7 +17,8 @@ public class User {
     }
     //full
 
-    public User(String username, String password, String email, String gender, String birthdate) {
+    public User(String id, String username, String password, String email, String gender, String birthdate) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -26,6 +28,9 @@ public class User {
 
     //getter and setter
 
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
     public String getUsername() {
         return username;
     }
@@ -66,16 +71,15 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    //toString
-
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
-                ", birthdate=" + birthdate +
+                ", birthdate='" + birthdate + '\'' +
                 '}';
     }
 }
