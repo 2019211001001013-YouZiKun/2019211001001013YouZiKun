@@ -108,7 +108,7 @@
        <url-pattern>/config</url-pattern>
    </servlet-mapping>
    -->
-    
+
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.YouZiKun.week3.demo.RegisterServlet</servlet-class>
@@ -117,5 +117,33 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+
+
+    <filter>
+        <filter-name>HelloFilter</filter-name>
+        <filter-class>com.YouZiKun.filter.HelloFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HelloFilter</filter-name>
+        <url-pattern>/hello</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoggerFilter</filter-name>
+        <filter-class>com.YouZiKun.filter.LoggerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggerFilter</filter-name>
+        <url-pattern>/hello</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.YouZiKun.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/hello</url-pattern>
+    </filter-mapping>
 
 </web-app>

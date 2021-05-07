@@ -60,8 +60,8 @@ public class LoginServlet extends HttpServlet {
 
 
         //method 3:
-        String username=request.getParameter("UserName");
-        String password=request.getParameter("PassWord");
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
         //=数据库访问对象....
         UserDao userDao=new UserDao();
         try {
@@ -88,7 +88,6 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session=request.getSession();
                 System.out.println("sessionid-->"+session.getId());
                 session.setMaxInactiveInterval(10);
-
                 session.setAttribute("user",users.get(0));
                 request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
             }else{

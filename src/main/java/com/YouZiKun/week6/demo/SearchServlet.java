@@ -11,8 +11,6 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String txt=request.getParameter("txt");
         String search=request.getParameter("search");
-        System.out.println("1 "+txt);
-        System.out.println("2 "+search);
         if(txt.equals("")) response.sendRedirect("index.jsp");
         else if(search.equals("baidu")) response.sendRedirect("https://www.baidu.com/s?wd="+txt);
         else if(search.equals("bing")) response.sendRedirect("https://cn.bing.com/search?q="+txt);

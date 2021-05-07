@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -36,7 +37,7 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.getRequestDispatcher("WEB-INF/views/register.jsp").forward(request,response);
     }
 
     @Override
@@ -60,53 +61,23 @@ public class RegisterServlet extends HttpServlet {
             throwables.printStackTrace();
         }
 
-        response.sendRedirect("login.jsp");
+        //response.sendRedirect("login.jsp");
 
         //7.select all rows from "usertable"
-
-/*
-        PrintWriter wr= response.getWriter();
-        wr.print("<table border=1>"
-                );
-        wr.print( "<tr>" +
-                    "<td>username</td>" +
-                    "<td>password</td>" +
-                    "<td>email</td>" +
-                    "<td>gender</td>" +
-                    "<td>birthDate</td>" +
-                  "</tr>" );
-
- */
-        /*
         try {
             ResultSet rs = con.createStatement().executeQuery("SELECT* FROM usertable");
-            while (rs.next()) {
-                wr.print("<tr>" +
-                            "<td>"+rs.getString(1)+"</td>" +
-                            "<td>"+rs.getString(2)+"</td>" +
-                            "<td>"+rs.getString(3)+"</td>" +
-                            "<td>"+rs.getString(4)+"</td>" +
-                            "<td>"+rs.getString(5)+"</td>" +
-                        "</tr>");
-            }
             //use request attribute
             //set rs request attribute
-            request.setAttribute("rsname",rs);
-            request.getRequestDispatcher("userList.jsp").forward(request,response);
+           // request.setAttribute("rsname",rs);
+           // request.getRequestDispatcher("userList.jsp").forward(request,response);
+            response.sendRedirect("login");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        //wr.print("</table>");
+
         //8.print all rows -use html <table><tr><td>
 
         //Print
-        PrintWriter writer=response.getWriter();
-        writer.println("<br>username :"+username);
-        writer.println("<br> password :"+password);
-        writer.println("<br> email :"+email);
-        writer.println("<br> gender :"+gender);
-        writer.println("<br> birth Date :"+birthDate );
-        writer.close();
-        */
+
     }
 }

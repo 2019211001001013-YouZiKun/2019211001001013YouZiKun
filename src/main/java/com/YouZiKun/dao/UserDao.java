@@ -37,6 +37,7 @@ public class UserDao implements IUserDao{
         ps.setString(4,user.getGender());
         ps.setString(5,user.getBirthdate());
         ps.setString(6,user.getId());
+        System.out.println(user.getId());
         return ps.executeUpdate();
         /*
         Statement stmt=con.createStatement();
@@ -72,7 +73,7 @@ public class UserDao implements IUserDao{
         Statement stmt=con.createStatement();
         ResultSet rs=stmt.executeQuery(sql);
         User user=null;
-        List<User> users=new ArrayList<User>();
+        List<User> users= new ArrayList<>();
         while(rs.next()){
             user=new User();
             user.setId(rs.getString("id"));
