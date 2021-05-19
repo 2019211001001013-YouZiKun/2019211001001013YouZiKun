@@ -48,7 +48,6 @@
 								style="border: 1px solid #F7F7F0; height: 100px;width: 80px;"/></a>
 							</td>
 							<td class="cart_description">
-								<h4>productName </h4>
 								<p>Web ID: productId</p>
 							</td>
 								<td class="cart_price">
