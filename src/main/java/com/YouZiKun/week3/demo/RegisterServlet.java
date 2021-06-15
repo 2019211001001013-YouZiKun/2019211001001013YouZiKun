@@ -1,83 +1,87 @@
 package com.YouZiKun.week3.demo;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-/*
-@WebServlet(
-        urlPatterns = "/register"
-)
-*/
 public class RegisterServlet extends HttpServlet {
-    Connection con=null; //class variable,
+    Connection con=null;
     @Override
-    public void init() throws ServletException {
-        //declare
-        /*
-        String driver=getServletContext().getInitParameter("driver");
-        String url=getServletContext().getInitParameter("url");
-        String Username=getServletContext().getInitParameter("Username");
-        String Password=getServletContext().getInitParameter("Password");
+    public void init() throws ServletException{
+        super.init();
+        /*ServletContext Context=getServletContext();
+        String driver=Context.getInitParameter("driver");
+        String url=Context.getInitParameter("url");
+        String username=Context.getInitParameter("username");
+        String password=Context.getInitParameter("password");
 
         try {
             Class.forName(driver);
-            con=DriverManager.getConnection(url,Username,Password);
+            con= DriverManager.getConnection(url,username,password);
+            System.out.println("init()-->"+con);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        }
-        */
-        con= (Connection) getServletContext().getAttribute("con");
+        }*/
+        // Servlet 服务连接器
+        con=(Connection) getServletContext().getAttribute("con");
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("WEB-INF/views/register.jsp").forward(request,response);
+
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
-        String gender = request.getParameter("gender");
-        String birthDate = request.getParameter("birthDate");
+        PrintWriter out=response.getWriter();
+        //String sql ="insert into usertable(id,username,password,email,gender,birthdate)values(?,?,?,?,?,?)";
+        String id=request.getParameter("id");
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
+        String email=request.getParameter("email");
+        String gender=request.getParameter("gender");
+        String birthdate=request.getParameter("birthdate");
+        //PreparedStatement ps=null;
+        try{
+            Statement st=con.createStatement();
+            String sql="insert into usertable(username,password,email,gender,birthdate)"+
+                    "values('"+username+"','"+password+"','"+email+"','"+gender+"','"+birthdate+"')";
+            System.out.println("sql:"+sql);
 
-        //6.insert a row into database table "usertable" in doPost()
-        try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO usertable (username,password,email,gender,birthDate) VALUES (?,?,?,?,?)");
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, email);
-            ps.setString(4, gender);
-            ps.setString(5, birthDate);
-            ps.execute();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+            int n=st.executeUpdate(sql);
+            System.out.println("n-->"+n);
 
-        //response.sendRedirect("login.jsp");
+            //sql="select id,username,password,email,gender,birthdate from usertable";
+            //ResultSet rs=st.executeQuery(sql);
+            //PrintWriter out=response.getWriter();
+            //request attribute 请求属性
+            //request.setAttribute("rsname",rs);
 
-        //7.select all rows from "usertable"
-        try {
-            ResultSet rs = con.createStatement().executeQuery("SELECT* FROM usertable");
-            //use request attribute
-            //set rs request attribute
-           // request.setAttribute("rsname",rs);
-           // request.getRequestDispatcher("userList.jsp").forward(request,response);
+            //request.getRequestDispatcher("userList.jsp").forward(request,response);//请求转发
             response.sendRedirect("login");
+            //System.out.println("I am in RegisterServlet-->doPost()-->after forward()");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        //out.print("</table>");
+        //out.print("</html>");
 
-        //8.print all rows -use html <table><tr><td>
+        //print - write into response
+    }
 
-        //Print
+    @Override
+    public void destroy(){
+        super.destroy();
+        try {
+            con.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 }

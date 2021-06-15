@@ -3,39 +3,69 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <welcome-file-list>
-        <welcome-file>home</welcome-file>
-    </welcome-file-list>
-    
+
     <context-param>
         <param-name>driver</param-name>
         <param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
     </context-param>
     <context-param>
         <param-name>url</param-name>
-        <param-value>jdbc:sqlserver://localhost;databaseName=userdb</param-value>
+        <param-value>jdbc:sqlserver://localhost:1433;DatabaseName=userdb</param-value>
     </context-param>
     <context-param>
-        <param-name>Username</param-name>
+        <param-name>username</param-name>
         <param-value>sa</param-value>
     </context-param>
     <context-param>
-        <param-name>Password</param-name>
+        <param-name>password</param-name>
         <param-value>admin123456789</param-value>
     </context-param>
 
 
-    <!--Servelet 1-->
     <servlet>
-        <servlet-name>anyName</servlet-name>
-        <servlet-class>com.YouZiKun.week2.demo.HelloWorldServlet</servlet-class>
+        <servlet-name>A</servlet-name>
+        <servlet-class>com.YouZiKun.week2.homework.HelloWorldServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>anyName</servlet-name>
+        <servlet-name>A</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 
-    <!--Servelet 2-->
+    <servlet>
+        <servlet-name>B</servlet-name>
+        <servlet-class>com.YouZiKun.week2.homework.exercise</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>B</servlet-name>
+        <url-pattern>/hi</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>com.YouZiKun.week3.demo.RegisterServlet</servlet-class>
+        <init-param>
+            <param-name>driver</param-name>
+            <param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>url</param-name>
+            <param-value>jdbc:sqlserver://localhost:1433;DatabaseName=userdb</param-value>
+        </init-param>
+        <init-param>
+            <param-name>username</param-name>
+            <param-value>sa</param-value>
+        </init-param>
+        <init-param>
+            <param-name>password</param-name>
+            <param-value>123456</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>LifeCycleServlet</servlet-name>
         <servlet-class>com.YouZiKun.week3.demo.LifeCycleServlet</servlet-class>
@@ -44,35 +74,36 @@
         <servlet-name>LifeCycleServlet</servlet-name>
         <url-pattern>/life</url-pattern>
     </servlet-mapping>
-
-    <!--Servelet 3-->
-    <!--
     <servlet>
-        <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.YouZiKun.week3.demo.RegisterServlet</servlet-class>
+        <servlet-name>ConfigDemoServlet</servlet-name>
+        <servlet-class>com.YouZiKun.week4.homework.ConfigDemoServlet</servlet-class>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>XieYuecong</param-value>
+        </init-param>
+        <init-param>
+            <param-name>studentid</param-name>
+            <param-value>2019211001001009</param-value>
+        </init-param>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
+        <servlet-name>ConfigDemoServlet</servlet-name>
+        <url-pattern>/config</url-pattern>
     </servlet-mapping>
-    -->
-    <!--Servelet 4-->
+
+
     <servlet>
         <servlet-name>JDBCDemoServlet</servlet-name>
         <servlet-class>com.YouZiKun.week4.demo.JDBCDemoServlet</servlet-class>
-        <!--
-         //String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-         //String url="jdbc:sqlserver://localhost;databaseName=userdb";
-         //String username="sa";
-         //String password="admin123456789";
-        -->
+
         <init-param>
             <param-name>driver</param-name>
             <param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
         </init-param>
         <init-param>
             <param-name>url</param-name>
-            <param-value>jdbc:sqlserver://localhost;databaseName=userdb</param-value>
+            <param-value>jdbc:sqlserver://localhost:1433;DatabaseName=userdb</param-value>
         </init-param>
         <init-param>
             <param-name>username</param-name>
@@ -80,44 +111,20 @@
         </init-param>
         <init-param>
             <param-name>password</param-name>
-            <param-value>admin123456789</param-value>
+            <param-value>123456</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+
     </servlet>
+
     <servlet-mapping>
         <servlet-name>JDBCDemoServlet</servlet-name>
         <url-pattern>/jdbc</url-pattern>
     </servlet-mapping>
 
-    <!--Servelet 5-->
-    <!--
-    <servlet>
-        <servlet-name>ConfigDemoServlet</servlet-name>
-        <servlet-class>com.YouZiKun.week4.demo.exercise1.ConfigDemoServlet</servlet-class>
-        <init-param>
-            <param-name>name</param-name>
-            <param-value>Youzikun</param-value>
-        </init-param>
-        <init-param>
-            <param-name>studentId</param-name>
-            <param-value>2019211001001013</param-value>
-        </init-param>
-    </servlet>
-   <servlet-mapping>
-       <servlet-name>ConfigDemoServlet</servlet-name>
-       <url-pattern>/config</url-pattern>
-   </servlet-mapping>
-   -->
-
-    <servlet>
-        <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.YouZiKun.week3.demo.RegisterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
-    </servlet-mapping>
-
+    <welcome-file-list>
+        <welcome-file>home</welcome-file><!--when you run app - first request send to home...HomeServlet-->
+    </welcome-file-list>
 
     <filter>
         <filter-name>HelloFilter</filter-name>
@@ -145,5 +152,16 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/hello</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>YourNameFilter</filter-name>
+        <filter-class>com.lab2.YourNameFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>YourNameFilter</filter-name>
+        <url-pattern>/lab2/welcome.jsp</url-pattern>
+        <url-pattern>/lab2/validate.jsp</url-pattern>
+    </filter-mapping>
+
 
 </web-app>

@@ -64,11 +64,11 @@ public class Category {
                 '}';
     }
     public static List<Category> findAllCategory(Connection con) throws SQLException {
-        String sql="SELECT* FROM Category";
-        List<Category> list=new ArrayList<Category>();
+        String sql="select * from Category";
+        List<Category> list =new ArrayList<Category>();
         PreparedStatement pt=con.prepareStatement(sql);
-        ResultSet rs=pt.executeQuery();
-        while (rs.next()){
+        ResultSet rs =pt.executeQuery();
+        while(rs.next()){
             Category c=new Category();
             c.setCategoryId(rs.getInt("categoryId"));
             c.setCategoryName(rs.getString("categoryName"));
@@ -77,15 +77,16 @@ public class Category {
         }
         return list;
     }
-    public String findByCategoryId(Connection con,int categoryId) throws SQLException {
-        String sql="Select* from Category where categoryId=?";
-        List<Category> list=new ArrayList<Category>();
+    public static String findByCategoryId(Connection con,int categoryId) throws SQLException {
+        String sql="select * from Category where categoryId=?";
         PreparedStatement pt=con.prepareStatement(sql);
-        ResultSet rs=pt.executeQuery();
+        pt.setInt(1,categoryId);
+        ResultSet rs =pt.executeQuery();
         String categoryName=null;
         while(rs.next()){
             categoryName=rs.getString("categoryName");
         }
         return categoryName;
+
     }
 }

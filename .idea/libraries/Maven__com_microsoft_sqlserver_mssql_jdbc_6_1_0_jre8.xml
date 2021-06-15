@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/mssql-jdbc/6.1.0.jre8/mssql-jdbc-6.1.0.jre8-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/mssql-jdbc-6.1.0.jre8-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

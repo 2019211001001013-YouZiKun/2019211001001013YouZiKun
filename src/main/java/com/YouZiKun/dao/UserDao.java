@@ -2,129 +2,231 @@ package com.YouZiKun.dao;
 
 import com.YouZiKun.model.User;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 public class UserDao implements IUserDao{
+
+
     @Override
     public boolean saveUser(Connection con, User user) throws SQLException {
-        Statement stmt=con.createStatement();
-        int result=stmt.executeUpdate("INSERT INTO usertable VALUES("+
-         user.getId()+"','"+user.getUsername()+"','"+user.getPassword()+"','"+user.getEmail()+"','"+user.getGender()+"','"+user.getBirthdate()+"')");
-
-        if (result==1) return true;
-        else return false;
+        //insert ...into usertable
+        String sql="insert into usertable (username,password,email,gender,birthdate) values(?,?,?,?,?)";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1, user.getUsername());
+        st.setString(2, user.getPassword());
+        st.setString(3, user.getEmail());
+        st.setString(4, user.getGender());
+        st.setDate(5, (java.sql.Date) user.getBirthDate());
+        ResultSet rs=st.executeQuery();
+       if(rs.next()){
+           user=new User();
+           user.setUsername(rs.getString("username"));
+           user.setPassword(rs.getString("password"));
+           user.setEmail(rs.getString("email"));
+           user.setGender(rs.getString("gender"));
+           user.setBirthDate(rs.getDate("birthdate"));
+           return true;
+       }else{
+           return false;
+       }
     }
 
     @Override
     public int deleteUser(Connection con, User user) throws SQLException {
-        Statement stmt=con.createStatement();
-        int result=stmt.executeUpdate("DELETE usertable WHERE username='"+user.getUsername()+"'");
-        return result;
+        //delete...where id=?
+        String sql="delete from usertable where id=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setInt(1,user.getId());
+        ResultSet rs=st.executeQuery();
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return 0;
     }
 
     @Override
     public int updateUser(Connection con, User user) throws SQLException {
-        //todo 5.1 - write update sql where id=?
-        //todo 5.2 - create prepared statement
-        //todo 5.3 - executeUpdate()
-        //todo 5.4 - return int
+        //update...where id=?
+        String sql = "update usertable set username=? , password=? , email=? , gender=? , birthdate=?  where id=?";
+        PreparedStatement st = con.prepareStatement(sql);
+        st.setString(1, user.getUsername());
+        st.setString(2, user.getPassword());
+        st.setString(3, user.getEmail());
+        st.setString(4, user.getGender());
+        st.setDate(5, new java.sql.Date(user.getBirthDate().getTime()));
+        st.setInt(6,user.getId());
+        st.executeUpdate();
+        if (st.executeUpdate() > 0) {
+            return 1;
+        }
+        return 0;
+    }
 
-        PreparedStatement ps=con.prepareStatement("UPDATE usertable SET username=?,password=?,email=?,gender=?,birthdate=? WHERE id=? ");
-        ps.setString(1,user.getUsername());
-        ps.setString(2,user.getPassword());
-        ps.setString(3,user.getEmail());
-        ps.setString(4,user.getGender());
-        ps.setString(5,user.getBirthdate());
-        ps.setString(6,user.getId());
-        System.out.println(user.getId());
-        return ps.executeUpdate();
-        /*
-        Statement stmt=con.createStatement();
-        int result=stmt.executeUpdate("UPDATE usertable SET username='"
-                +user.getUsername()+"',password='"
-                +user.getUsername()+"',email='"
-                +user.getEmail()+"',gender='"
-                +user.getGender()+"',birthdate='"
-                +user.getBirthdate()+"'" +
-                "WHERE id='"+user.getId()+"'");
-        return result;*/
+    @Override
+    public User findById(Connection con, Integer id) throws SQLException {
+        //select ---where id=?
+        String sql="select * from usertable where id=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setInt(1,id);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+
+        return user;
     }
 
     @Override
     public User findByUsernamePassword(Connection con, String username, String password) throws SQLException {
-        PreparedStatement ps=con.prepareStatement("SELECT* FROM usertable WHERE username=? AND password=?");
-        ps.setString(1,username);// function parameter
-        ps.setString(2,password);
-        ResultSet rs=ps.executeQuery();
+        //select ---where username=? and password=?
+        String sql="select * from usertable where username=? and password=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1,username);
+        st.setString(2,password);
+        ResultSet rs=st.executeQuery();
         User user=null;
         if(rs.next()){
-            //use object "user" to save one line in database.
+            //get from rs and set into user model
             user=new User();
+            user.setId(rs.getInt("id"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
             user.setGender(rs.getString("gender"));
-            user.setBirthdate(rs.getString("birthdate"));
+            user.setBirthDate(rs.getDate("birthdate"));
         }
         return user;
-    }
-    public List<User> findMethod(Connection con,String sql) throws  SQLException{
-        Statement stmt=con.createStatement();
-        ResultSet rs=stmt.executeQuery(sql);
-        User user=null;
-        List<User> users= new ArrayList<>();
-        while(rs.next()){
-            user=new User();
-            user.setId(rs.getString("id"));
-            user.setUsername(rs.getString("username"));
-            user.setPassword(rs.getString("password"));
-            user.setEmail(rs.getString("email"));
-            user.setGender(rs.getString("gender"));
-            user.setBirthdate(rs.getString("birthdate"));
-            users.add(user);
-        }
-        return users;
-    }
-
-    @Override
-    public List<User> findById(Connection con, String id) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE username='"+id+"'";
-        return findMethod(con,sql);
     }
 
     @Override
     public List<User> findByUsername(Connection con, String username) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE username='"+username+"'";
-        return findMethod(con,sql);
+        String sql="select * from usertable where username=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1,username);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
     }
 
     @Override
     public List<User> findByPassword(Connection con, String password) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE password='"+password+"'";
-        return findMethod(con,sql);
+        String sql="select * from usertable where password=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1,password);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
     }
 
     @Override
     public List<User> findByEmail(Connection con, String email) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE email='"+email+"'";
-        return findMethod(con,sql);
-    }
-    @Override
-    public List<User> findByGender(Connection con, String gender) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE ='"+gender+"'";
-        return findMethod(con,sql);
+        String sql="select * from usertable where email=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1,email);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
     }
 
     @Override
-    public List<User> findByBirthdate(Connection con, String birthDate) throws SQLException {
-        String sql="SELECT* FROM usertable WHERE ='"+birthDate+"'";
-        return findMethod(con,sql);
+    public List<User> findByGender(Connection con, String gender) throws SQLException {
+        String sql="select * from usertable where gender=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setString(1,gender);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
+    }
+
+    @Override
+    public List<User> findByBirthdate(Connection con, Date birthdate) throws SQLException {
+        String sql="select * from usertable where birthdate=?";
+        PreparedStatement st=con.prepareStatement(sql);
+        st.setDate(1, (java.sql.Date) birthdate);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
     }
 
     @Override
     public List<User> findAllUser(Connection con) throws SQLException {
-        String sql="SELECT* FROM usertable";
-        return findMethod(con,sql);
+        //select * from usertable
+        String sql="select * from usertable";
+        PreparedStatement st=con.prepareStatement(sql);
+        ResultSet rs=st.executeQuery();
+        User user=null;
+        if(rs.next()){
+            user=new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthDate(rs.getDate("birthdate"));
+        }
+        return (List<User>) user;
     }
 }

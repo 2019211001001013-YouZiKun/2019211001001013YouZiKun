@@ -4,7 +4,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-1">
-					<div class="login-form"><!--login form-->
+					<div class="login-form"><!--Login form-->
 						<h2>Login to your account</h2><%
     if(!(request.getAttribute("message")==null)){
     out.println("<h3>"+request.getAttribute("message")+"</h3>");
@@ -38,7 +38,7 @@
    </span>
     <button type="submit" class="btn btn-default">Login</button>
 </form>	
-					</div><!--/login form-->
+					</div><!--/Login form-->
 				</div>
 				<div class="col-sm-1">
 					<h2 class="or">OR</h2>

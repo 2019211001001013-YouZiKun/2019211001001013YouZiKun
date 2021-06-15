@@ -9,22 +9,22 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-@WebServlet(name = "UpdateUserServlet", value = "/updateuser")
+@WebServlet(name = "UpdateUserServlet", value = "/updateUser")//url
 public class UpdateUserServlet extends HttpServlet {
     Connection con=null;
     @Override
-    public void init() throws ServletException {
-        con= (Connection) getServletContext().getAttribute("con");
+    public void init() throws ServletException{
+        super.init();
+        con=(Connection) getServletContext().getAttribute("con");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/views/updateUser.jsp").forward(request,response);
+        request.getRequestDispatcher("WEB-INF/views/updateUserView.jsp").forward(request,response);
 
-        //todo 1: forward to WEB-INF/views/updateUser.jsp
-        //todo 2: create one jsp page -updateUser
     }
 
     @Override
@@ -37,32 +37,41 @@ public class UpdateUserServlet extends HttpServlet {
         String birthdate=request.getParameter("birthdate");
 
         User user=new User();
-        user.setId(id);
+
+        user.setId(Integer.valueOf(id));
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
         user.setGender(gender);
-        user.setBirthdate(birthdate);
-        UserDao userDao=new UserDao();
-        HttpSession session=request.getSession();
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            int result=userDao.updateUser(con,user);
-            if (result==0){
-                System.out.println("hello world");
-            }
-            else{
-                session.setAttribute("user",user);
-                request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
-            }
+            //Date date = ft.parse(birthdate);
+            user.setBirthDate(ft.parse(birthdate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //try {
+         //   user.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").parse(birthdate));
+        //} catch (ParseException e) {
+        //    e.printStackTrace();
+        //}
+
+
+        UserDao userDao=new UserDao();
+
+        try {
+            userDao.updateUser(con,user);
+            HttpSession session=request.getSession();
+            session.setMaxInactiveInterval(30);
+            session.setAttribute("user",user);//set user into request
+
+            request.getRequestDispatcher("accountDetails").forward(request, response);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        //todo 1: get all (6) request parameters
-        //todo 2: create an object of User Model
-        //todo 3: set all 6 request parameter values into user model -setXXX()
-        //todo 4: create an object of UserDao
-        //todo 5: Call updateUser() in UserDao
 
-        //todo 6: forward to WEB-INF/views/userinfo.jsp
+
     }
+
+
 }

@@ -3,14 +3,23 @@ package com.YouZiKun.model;
 import java.io.InputStream;
 
 public class Product {
-    private int productId;
+    private  int productId;
     private String productName;
-    private String productdescription;
+    private String productDescription;
     private InputStream picture;
     private double price;
     private int categoryId;
 
     public  Product(){}
+
+    public Product(int productId, String productName, String productDescription, InputStream picture, double price, int categoryId) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.picture = picture;
+        this.price = price;
+        this.categoryId = categoryId;
+    }
 
     public int getProductId() {
         return productId;
@@ -28,12 +37,12 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getProductdescription() {
-        return productdescription;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setProductdescription(String productdescription) {
-        this.productdescription = productdescription;
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
     public InputStream getPicture() {
@@ -60,21 +69,12 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public Product(int productId, String productName, String productdescription, InputStream picture, double price, int categoryId) {
-        this.productId = productId;
-        this.productName = productName;
-        this.productdescription = productdescription;
-        this.picture = picture;
-        this.price = price;
-        this.categoryId = categoryId;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
                 "productId=" + productId +
                 ", productName='" + productName + '\'' +
-                ", productdescription='" + productdescription + '\'' +
+                ", productDescription='" + productDescription + '\'' +
                 ", picture=" + picture +
                 ", price=" + price +
                 ", categoryId=" + categoryId +
