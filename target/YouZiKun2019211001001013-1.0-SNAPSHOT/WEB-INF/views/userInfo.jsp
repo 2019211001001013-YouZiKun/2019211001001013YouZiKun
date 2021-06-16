@@ -1,27 +1,32 @@
-<%@ page import="com.YouZiKun.model.User" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="com.YouZiKun.model.User" %><%--
   Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2021/4/13
-  Time: 23:16
+  User: 86153
+  Date: 2021/4/13 0013
+  Time: 20:33
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="header.jsp"%>
 <h1>User Info</h1>
-12312312312312
-<%
-    User us= (User) session.getAttribute("user");
-%>
-<%%>
-3212123123123123
+<%--
+Cookie [] allCookies=request.getCookies();
+for (Cookie c:allCookies){
+    out.println("<br/>"+c.getName()+"---"+c.getValue());
+}
+--%>
 
-<table border="1">
-    <tr><td>Username:</td><td><%=us.getUsername()%></td></tr>
-    <tr><td>Password:</td><td><%=us.getPassword()%></td></tr>
-    <tr><td>Email:</td><td><%=us.getEmail()%></td></tr>
-    <tr><td>Gender:</td><td><%=us.getGender()%></td></tr>
-    <tr><td>BirthDate:</td><td><%=us.getBirthdate()%></td></tr>
+<%
+User u=(User) session.getAttribute("user");
+%>
+<table >
+    <tr><td>Id:</td><td><%=u.getId()%></td> </tr>
+    <tr><td>Username:</td><td><%=u.getUsername()%></td> </tr>
+    <tr><td>Password:</td><td><%=u.getPassword()%></td> </tr>
+    <tr><td>Email:</td><td><%=u.getEmail()%></td> </tr>
+    <tr><td>Gender:</td><td><%=u.getGender()%></td> </tr>
+    <tr><td>Birth Date:</td><td><%=u.getBirthDate()%></td></tr>
+    <tr><a href="updateUser">Update</a></tr>
 </table>
-<a href="updateuser">update</a>
+
+
 <%@ include file="footer.jsp"%>
